@@ -1,14 +1,17 @@
-# Используйте официальный образ Apache из Docker Hub
-FROM httpd:2.4
+# Используем образ Ubuntu 22.04
+FROM ubuntu:22.04
 
-# Копируйте свойственные вам конфигурационные файлы, если они необходимы
-# COPY ./my-apache.conf /usr/local/apache2/conf/httpd.conf
+# Обновляем пакеты и устанавливаем Nginx
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Можете скопировать свой веб-контент в контейнер, если это необходимо
-# COPY ./my-website /usr/local/apache2/htdocs/
+# Копируем файл конфигурации Nginx в контейнер
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Этот контейнер будет слушать порт 80
+# Открываем порт 80 для веб-сервера Nginx
 EXPOSE 80
 
-# Необходимо использовать эту команду для запуска Apache в фоновом режиме
-CMD ["httpd-foreground"]
+# Запускаем Nginx при старте контейнера
+CMD ["nginx", "-g", "daemon off;"]
