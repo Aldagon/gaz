@@ -1,6 +1,2 @@
-
-
-
-who is you?
-
-hello world,you from is?
+for i in range(10):
+  print(i)
